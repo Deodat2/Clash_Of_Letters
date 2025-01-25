@@ -1,0 +1,361 @@
+<MenuScreen>:
+    canvas.before:
+        Rectangle:
+            source: "assets/Images/ciel5.jfif"  # Chemin vers ton image
+            pos: self.pos
+            size: self.size
+    ParticlesEffect:
+        id: particles
+        size: self.size
+        pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        Label:
+            size_hint: 1, 0.09
+            text: 'Clash of letters'
+            font_size: 50
+            bold: True
+            color: 0.9, 0.9, 0.9, 1  # Gris clair
+        BoxLayout:
+            size_hint: 0.9, 0.2  # Taille relative (90% de la largeur, 20% de la hauteur)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}  # Centre sur l'écran
+            orientation: 'horizontal'
+            spacing: 150
+            Button:
+                size_hint: 0.5, 0.4
+                font_size: '30sp'
+                font_name: 'Roboto-Bold.ttf'  # Ajoute une police personnalisée
+                background_color: 0, 0, 0, 0  # Rendre l'arrière-plan transparent
+                color: 1, 1, 1, 1            # Texte en blanc
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.6, 0.9, 1  # Couleur de fond (bleu clair)
+                    RoundedRectangle:
+                        source: "assets/Images/pendu1.jfif"
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]  # Arrondi des coins
+                    Color:
+                        rgba: 1, 1, 1, 1  # Couleur de la bordure (blanc)
+                    Line:
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                        width: 1.5
+                text: 'Jouer au Pendu'
+                on_press: app.go_to_Pendu()
+            Button:
+                size_hint: 0.5, 0.4
+                font_size: '30sp'
+                font_name: 'Roboto-Bold.ttf'  # Ajoute une police personnalisée
+                background_color: 0, 0, 0, 0  # Rendre l'arrière-plan transparent
+                color: 1, 1, 1, 1            # Texte en blanc
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.6, 0.9, 1  # Couleur de fond (bleu clair)
+                    RoundedRectangle:
+                        source: "assets/Images/scrabble1.jfif"
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]  # Arrondi des coins
+                    Color:
+                        rgba: 1, 1, 1, 1  # Couleur de la bordure (blanc)
+                    Line:
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                        width: 1.5
+                text: 'Jouer au Scrabble'
+                on_press: app.go_to_Scrabble()
+        Button:
+            background_color: 0.2, 0.6, 0.9, 1  # Bleu clair (R, G, B, A)
+            color: 1, 1, 1, 1                  # Texte en blanc
+            font_size: '20sp'
+            size_hint: 0.1, 0.1
+            pos_hint: {'center_x': 0.5}
+            text: 'Quitter'
+            on_press: app.stop()
+
+<Pendu_SurvivalScreen>:
+    canvas.before:
+        Rectangle:
+            source: "assets/Images/classe1.jfif"  # Chemin vers ton image
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 20
+            Label:
+                id: score_label
+                color: (0, 0, 0.5, 1)
+                bold: True
+                text: "Score : 0"
+                font_size: '24sp'
+            Label:
+                text: "Survival"
+                color: (0, 0, 0.5, 1)
+                bold: True
+                font_size: '24sp'
+                halign: 'center'
+            Label:
+                id: lives_label
+                color: (0, 0, 0.5, 1)
+                bold: True
+                text: "lives : 0"
+                font_size: '24sp'
+        Label:
+            id: mot_cache
+            text: root.locate
+            font_size: '22sp'
+            halign: 'center'
+        TextInput:
+            id: letter_input
+            size_hint: 0.2, 0.5
+            pos_hint: {'center_x': 0.5}
+            hint_text: "lettre"
+            multiline: False
+            halign: 'center'
+            font_size: '40sp'
+            input_filter: lambda text, from_undo: text if len(text) <= 1 and text.isalpha() else ""
+            on_text_validate: root.game_play(letter_input.text); self.text = ""; self.focus = True  # Appelle `game_play` lorsqu'on presse "Entrée"
+        Button:
+            size_hint: 0.1, 0.4
+            pos_hint: {'center_x': 0.5}
+            text: "Essayer"
+            font_size: '18sp'
+            on_press: self.size = (self.width * 0.95, self.height * 0.95)  # Rétrécit légèrement
+            on_release: self.size = (self.width / 0.95, self.height / 0.95)  # Rétablit la taille
+            on_press: root.game_play(letter_input.text)
+            disabled: not letter_input.text  # Désactive le bouton si l'entrée est vide
+        Label:
+            id: resultat_label
+            text: "hallo"
+            font_size: '18sp'
+            halign: 'center'
+        Button:
+            size_hint: 0.1, 0.4
+            pos_hint: {'center_x': 0.5}
+            text: "Retour"
+            font_size: '18sp'
+            on_press: app.root.current = 'pendu_mode'
+
+
+<Pendu_ArcadeScreen>:
+    canvas.before:
+        Rectangle:
+            source: "assets/Images/class2.jfif"  # Chemin vers ton image
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 20
+            Label:
+                id: stage_label
+                color: (0.2, 0.2, 0.2, 1)
+                bold: True
+                text: root.stage
+                font_size: '24sp'
+            Label:
+                text: "Arcade"
+                color: (0.2, 0.2, 0.2, 1)
+                bold: True
+                font_size: '24sp'
+                halign: 'center'
+            Label:
+                id: lives_label
+                text: root.lives
+                color: (0.2, 0.2, 0.2, 1)
+                bold: True
+                font_size: '24sp'
+        Label:
+            id: mot_cache
+            text: root.locate
+            font_size: '22sp'
+            halign: 'center'
+        TextInput:
+            id: letter_input
+            size_hint: 0.2, 0.5
+            pos_hint: {'center_x': 0.5}
+            hint_text: "lettre"
+            multiline: False
+            halign: 'center'
+            font_size: '40sp'
+            input_filter: lambda text, from_undo: text if len(text) <= 1 and text.isalpha() else ""
+            on_text_validate: root.game_play(letter_input.text); self.text = ""; self.focus = True  # Appelle `game_play` lorsqu'on presse "Entrée"
+        Button:
+            size_hint: 0.1, 0.4
+            pos_hint: {'center_x': 0.5}
+            id: bouton
+            text: "Essayer"
+            font_size: '18sp'
+            on_press: root.game_play(letter_input.text)
+            disabled: not letter_input.text  # Désactive le bouton si l'entrée est vide
+        Label:
+            id: resultat_label
+            text: ""
+            font_size: '18sp'
+            halign: 'center'
+        Button:
+            size_hint: 0.1, 0.4
+            pos_hint: {'center_x': 0.5}
+            text: "Retour"
+            font_size: '18sp'
+            on_press: app.root.current = 'pendu_mode'
+
+
+<PenduModeScreen>:
+    canvas.before:
+        Rectangle:
+            source: "assets/Images/classe1.jfif"  # Chemin vers ton image
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        Label:
+            size_hint: 1, 0.09
+            text: 'Pendu'
+            font_size: 50
+            bold: True
+            color: 0.9, 0.9, 0.9, 1  # Gris clair
+        BoxLayout:
+            size_hint: 0.9, 0.2  # Taille relative (90% de la largeur, 20% de la hauteur)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            orientation: 'horizontal'
+            spacing: 30
+            Button:
+                size_hint: 0.3, 0.5
+                font_size: '30sp'
+                font_name: 'Roboto-Bold.ttf'  # Ajoute une police personnalisée
+                background_color: 0, 0, 0, 0  # Rendre l'arrière-plan transparent
+                color: 1, 1, 1, 1            # Texte en blanc
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.6, 0.9, 1  # Couleur de fond (bleu clair)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]  # Arrondi des coins
+                    Color:
+                        rgba: 1, 1, 1, 1  # Couleur de la bordure (blanc)
+                    Line:
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                        width: 1.5
+                text: 'Arcade'
+                on_press: app.go_to_Pendu_arcade()
+            Button:
+                size_hint: 0.3, 0.5
+                font_size: '30sp'
+                font_name: 'Roboto-Bold.ttf'  # Ajoute une police personnalisée
+                background_color: 0, 0, 0, 0  # Rendre l'arrière-plan transparent
+                color: 1, 1, 1, 1            # Texte en blanc
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.6, 0.9, 1  # Couleur de fond (bleu clair)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]  # Arrondi des coins
+                    Color:
+                        rgba: 1, 1, 1, 1  # Couleur de la bordure (blanc)
+                    Line:
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                        width: 1.5
+                text: 'Survie'
+                on_press: app.go_to_Pendu_survival()
+        Button:
+            background_color: 0.2, 0.6, 0.9, 1  # Bleu clair (R, G, B, A)
+            color: 1, 1, 1, 1                  # Texte en blanc
+            font_size: '20sp'
+            size_hint: 0.3, 0.1
+            pos_hint: {'center_x': 0.5}
+            text: "Retour au Menu"
+            on_press: app.go_to_menu()
+
+
+<ScrabbleModeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        Label:
+            text: "Scrabble"
+            font_size: '27sp'
+            halign: 'center'
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 10
+            Button:
+                text: 'Arcade'
+                font_size: '20sp'
+                on_press: app.root.current = 'pendu'
+            Button:
+                text: 'Survie'
+                font_size: '20sp'
+                on_press: app.root.current = 'pendu'
+        Button:
+            text: "Retour au Menu"
+            font_size: '18sp'
+            on_press: app.root.current = 'menu'
+
+
+<ScrabbleScreen>:
+    canvas.before:
+        Rectangle:
+            source: "assets/Images/class2.jfif"  # Chemin vers ton image
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 20
+        padding: 20
+        Label:
+            text: "Bienvenue au Scrabble !"
+            font_size: '24sp'
+            halign: 'center'
+        Label:
+            id: mot_cache
+            text: root.word
+            bold: True
+            font_size: '22sp'
+            halign: 'center'
+        TextInput:
+            id: Word_input
+            size_hint: 0.3, 0.6
+            pos_hint: {'center_x': 0.5}
+            hint_text: "lettre"
+            multiline: False
+            halign: 'center'
+            font_size: '40sp'
+            on_text_validate: root.game_play(letter_input.text); self.text = ""; self.focus = True # Appelle `game_play` lorsqu'on presse "Entrée"
+        Button:
+            size_hint: 0.1, 0.4
+            pos_hint: {'center_x': 0.5}
+            text: "Essayer"
+            font_size: '18sp'
+            on_press: root.game_play(Word_input.text)
+        Label:
+            id: resultat_label
+            text: ""
+            font_size: '18sp'
+            halign: 'center'
+        Label:
+            id: score_label
+            text: "Score : 0"
+            font_size: '18sp'
+            halign: 'center'
+        Button:
+            size_hint: 0.2, 0.4
+            pos_hint: {'center_x': 0.5}
+            text: "Retour au Menu"
+            font_size: '18sp'
+            on_press: app.go_to_menu()
+
+
