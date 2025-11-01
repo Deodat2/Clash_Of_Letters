@@ -8,8 +8,9 @@
 
 ## Comment utiliser l'application
 
-1. Exécutez le script : `main.py`  
-2. Une fois l'application lancée, cliquez sur le bouton correspondant au jeu auquel vous souhaitez jouer.
+1. Executer la commande : `pip install kivy`
+2. Exécutez le script : `main.py`
+3. Une fois l'application lancée, cliquez sur le bouton correspondant au jeu auquel vous souhaitez jouer.
 
 ---
 
